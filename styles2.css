@@ -399,6 +399,50 @@ footer { background: #081d32; color: rgba(255,255,255,.7); padding: 30px 0; }
   .research-grid { grid-template-columns: 1fr; }
   .people-grid { grid-template-columns: repeat(2, 1fr); }
   .section-heading { align-items: flex-start; flex-direction: column; }
+  .resources-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .resource-card {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    column-gap: 14px;
+    row-gap: 5px;
+    align-items: start;
+  }
+
+  /* 번호는 왼쪽에서 두 줄 높이를 모두 차지 */
+  .resource-card > span {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    padding-top: 2px;
+  }
+
+  /* 과목명 */
+  .resource-card > strong {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.35;
+  }
+
+  /* 과목 설명 */
+  .resource-card > small {
+    grid-column: 2;
+    grid-row: 2;
+    min-width: 0;
+
+    word-break: normal;
+    overflow-wrap: break-word;
+    white-space: normal;
+    line-height: 1.5;
+  }
+
 }
 
 @media (max-width: 600px) {
@@ -424,10 +468,23 @@ footer { background: #081d32; color: rgba(255,255,255,.7); padding: 30px 0; }
   .hero-copy { font-size: 16px; }
   .button { width: 100%; }
   .stats { grid-template-columns: 1fr; }
-  .people-grid, .resource-grid { grid-template-columns: 1fr; }
+  .people-grid, .resources-grid { grid-template-columns: 1fr; }
   .publication-list article, .news-list article { grid-template-columns: 1fr; gap: 8px; }
   .footer-grid { flex-direction: column; text-align: center; }
   .portrait-placeholder { max-width: 430px; }
+  .resource-card {
+    grid-template-columns: 32px minmax(0, 1fr);
+    column-gap: 12px;
+    padding: 22px 18px;
+  }
+
+  .resource-card > strong {
+    font-size: 17px;
+  }
+
+  .resource-card > small {
+    font-size: 13px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
