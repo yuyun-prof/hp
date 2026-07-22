@@ -1,3 +1,179 @@
+// music
+  const tracks = [
+    {
+      title: "Music 01",
+      artist: "Playlist",
+      src: "assets/m/d5-01.m4a"
+    },
+    {
+      title: "Music 02",
+      artist: "Playlist",
+      src: "assets/m/d5-02.m4a"
+    },
+    {
+      title: "Music 03",
+      artist: "Playlist",
+      src: "assets/m/d5-05.m4a"
+    },
+    {
+      title: "Music 04",
+      artist: "Playlist",
+      src: "assets/m/d5-07.m4a"
+    },
+    {
+      title: "Music 05",
+      artist: "Playlist",
+      src: "assets/m/d7-02.m4a"
+    },
+    {
+      title: "Music 06",
+      artist: "Playlist",
+      src: "assets/m/d7-04.m4a"
+    },
+    {
+      title: "Music 07",
+      artist: "Playlist",
+      src: "assets/m/d7-06.m4a"
+    },
+    {
+      title: "Music 08",
+      artist: "Playlist",
+      src: "assets/m/d7-08.m4a"
+    },
+    {
+      title: "Music 09",
+      artist: "Playlist",
+      src: "assets/m/d7-14.m4a"
+    },
+    {
+      title: "Music 10",
+      artist: "Playlist",
+      src: "assets/m/d11-02.m4a"
+    }
+  ];
+
+  const audioPlayer = document.getElementById("audioPlayer");
+  const playButton = document.getElementById("playButton");
+  const playButtonIcon = document.getElementById("playButtonIcon");
+  const nextButton = document.getElementById("nextButton");
+  const musicTitle = document.getElementById("musicTitle");
+  const musicArtist = document.getElementById("musicArtist");
+
+  let currentTrackIndex = -1;
+
+  function getRandomTrackIndex() {
+    if (tracks.length === 1) {
+      return 0;
+    }
+
+    let randomIndex;
+
+    do {
+      randomIndex = Math.floor(Math.random() * tracks.length);
+    } while (randomIndex === currentTrackIndex);
+
+    return randomIndex;
+  }
+
+  function loadRandomTrack() {
+    currentTrackIndex = getRandomTrackIndex();
+  
+    const track = tracks[currentTrackIndex];
+  
+    audioPlayer.src = track.src;
+    audioPlayer.load();
+  
+    // 텍스트 요소가 있을 때만 변경
+    if (musicTitle) {
+      musicTitle.textContent = track.title;
+    }
+  
+    if (musicArtist) {
+      musicArtist.textContent = track.artist;
+    }
+  }
+
+  function showPlayingIcon() {
+    playButtonIcon.src = "assets/icon/stop.png";
+    playButton.setAttribute("aria-label", "정지");
+  }
+
+  function showStoppedIcon() {
+    playButtonIcon.src = "assets/icon/play.png";
+    playButton.setAttribute("aria-label", "재생");
+  }
+
+  async function playMusic() {
+    try {
+      await audioPlayer.play();
+      showPlayingIcon();
+    } catch (error) {
+      showStoppedIcon();
+  
+      if (musicArtist) {
+        musicArtist.textContent = "재생 버튼을 눌러주세요";
+      }
+    }
+  }
+
+  function stopMusic() {
+    audioPlayer.pause();
+    showStoppedIcon();
+  }
+
+  function toggleMusic() {
+    if (audioPlayer.paused) {
+      playMusic();
+    } else {
+      stopMusic();
+    }
+  }
+
+  function playNextRandomTrack() {
+    loadRandomTrack();
+    playMusic();
+  }
+
+  playButton.addEventListener("click", toggleMusic);
+  nextButton.addEventListener("click", playNextRandomTrack);
+  audioPlayer.addEventListener("ended", async () => {
+    loadRandomTrack();
+    await playMusic();
+  });
+  audioPlayer.addEventListener("play", showPlayingIcon);
+  audioPlayer.addEventListener("pause", showStoppedIcon);
+  audioPlayer.addEventListener("error", () => {
+    showStoppedIcon();
+  
+    if (musicArtist) {
+      musicArtist.textContent = "파일을 불러올 수 없습니다";
+    }
+  });
+  window.addEventListener("DOMContentLoaded", async () => {
+    audioPlayer.volume = 0.55;
+  
+    loadRandomTrack();
+  
+    try {
+      await audioPlayer.play();
+      showPlayingIcon();
+    } catch (error) {
+      showStoppedIcon();
+    }
+  });
+  document.addEventListener(
+    "pointerdown",
+    async () => {
+      if (audioPlayer.paused) {
+        await playMusic();
+      }
+    },
+    { once: true }
+  );
+
+
+
+// 시작
 const header = document.querySelector('.site-header');
 const menuButton = document.querySelector('.menu-button');
 const navLinks = document.querySelector('.nav-links');
