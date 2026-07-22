@@ -104,15 +104,20 @@
   }
 
   async function playMusic() {
+    console.log("playMusic 호출");
+    console.log("재생 전 readyState:", audioPlayer.readyState);
+  
     try {
       await audioPlayer.play();
+  
+      console.log("재생 성공");
+      console.log("재생 후 paused:", audioPlayer.paused);
+  
       showPlayingIcon();
     } catch (error) {
-      showStoppedIcon();
+      console.error("재생 실패:", error.name, error.message);
   
-      if (musicArtist) {
-        musicArtist.textContent = "재생 버튼을 눌러주세요";
-      }
+      showStoppedIcon();
     }
   }
 
@@ -122,6 +127,11 @@
   }
 
   function toggleMusic() {
+    console.log("toggleMusic 호출");
+    console.log("paused:", audioPlayer.paused);
+    console.log("readyState:", audioPlayer.readyState);
+    console.log("currentSrc:", audioPlayer.currentSrc);
+  
     if (audioPlayer.paused) {
       playMusic();
     } else {
@@ -134,6 +144,22 @@
     playMusic();
   }
 
+
+  audioPlayer.addEventListener("loadstart", () => {
+    console.log("오디오 로드 시작");
+  });
+  audioPlayer.addEventListener("loadedmetadata", () => {
+    console.log("메타데이터 로드 완료");
+  });
+  audioPlayer.addEventListener("canplay", () => {
+    console.log("재생 가능 상태");
+  });
+  audioPlayer.addEventListener("playing", () => {
+    console.log("실제 재생 시작");
+  });
+  audioPlayer.addEventListener("waiting", () => {
+    console.log("버퍼링 중");
+  });
   playButton.addEventListener("click", toggleMusic);
   nextButton.addEventListener("click", playNextRandomTrack);
   audioPlayer.addEventListener("ended", async () => {
@@ -143,6 +169,7 @@
   audioPlayer.addEventListener("play", showPlayingIcon);
   audioPlayer.addEventListener("pause", showStoppedIcon);
   audioPlayer.addEventListener("error", () => {
+    console.error("오디오 오류:", audioPlayer.error);
     showStoppedIcon();
   
     if (musicArtist) {
