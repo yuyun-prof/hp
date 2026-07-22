@@ -58,7 +58,8 @@
   const nextButton = document.getElementById("nextButton");
   const musicTitle = document.getElementById("musicTitle");
   const musicArtist = document.getElementById("musicArtist");
-
+  const enterButton = document.getElementById("enterButton");
+  
   let currentTrackIndex = -1;
 
   function getRandomTrackIndex() {
@@ -201,6 +202,21 @@ window.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
+enterButton.addEventListener("click", async () => {
+  // 이미 재생 중이면 아무것도 하지 않음
+  if (!audioPlayer.paused) {
+    return;
+  }
+
+  // 정지 상태일 때만 재생
+  await playMusic();
+});
+
+enterButton.addEventListener("click", async () => {
+  if (audioPlayer.paused) {
+    await playMusic();
+  }
+});
 
 
 
