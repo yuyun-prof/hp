@@ -139,9 +139,9 @@
     }
   }
 
-  function playNextRandomTrack() {
+  async function playNextRandomTrack() {
     loadRandomTrack();
-    playMusic();
+    await playMusic();
   }
 
 
@@ -161,42 +161,46 @@
     console.log("버퍼링 중");
   });
   playButton.addEventListener("click", toggleMusic);
-  nextButton.addEventListener("click", playNextRandomTrack);
-  audioPlayer.addEventListener("ended", async () => {
-    loadRandomTrack();
-    await playMusic();
-  });
-  audioPlayer.addEventListener("play", showPlayingIcon);
-  audioPlayer.addEventListener("pause", showStoppedIcon);
-  audioPlayer.addEventListener("error", () => {
-    console.error("오디오 오류:", audioPlayer.error);
+
+nextButton.addEventListener("click", playNextRandomTrack);
+
+audioPlayer.addEventListener("ended", async () => {
+  loadRandomTrack();
+  await playMusic();
+});
+
+audioPlayer.addEventListener("play", showPlayingIcon);
+audioPlayer.addEventListener("pause", showStoppedIcon);
+
+audioPlayer.addEventListener("error", () => {
+  console.error("오디오 오류:", audioPlayer.error);
+  showStoppedIcon();
+
+  if (musicArtist) {
+    musicArtist.textContent = "파일을 불러올 수 없습니다";
+  }
+});
+
+window.addEventListener("DOMContentLoaded", async () => {
+  audioPlayer.volume = 0.55;
+  loadRandomTrack();
+
+  try {
+    await audioPlayer.play();
+
+    console.log("자동재생 성공");
+    showPlayingIcon();
+  } catch (error) {
+    console.log(
+      "자동재생 차단:",
+      error.name,
+      error.message
+    );
+
     showStoppedIcon();
-  
-    if (musicArtist) {
-      musicArtist.textContent = "파일을 불러올 수 없습니다";
-    }
-  });
-  window.addEventListener("DOMContentLoaded", async () => {
-    audioPlayer.volume = 0.55;
-  
-    loadRandomTrack();
-  
-    try {
-      await audioPlayer.play();
-      showPlayingIcon();
-    } catch (error) {
-      showStoppedIcon();
-    }
-  });
-  document.addEventListener(
-    "pointerdown",
-    async () => {
-      if (audioPlayer.paused) {
-        await playMusic();
-      }
-    },
-    { once: true }
-  );
+  }
+});
+
 
 
 
