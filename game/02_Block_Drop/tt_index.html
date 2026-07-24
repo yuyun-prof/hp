@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Block Drop</title>
+  <link rel="stylesheet" href="tt_style.css">
+</head>
+<body>
+  <main class="Block_Drop-app" aria-label="블록드랍 게임">
+    <section class="game-layout">
+      <div class="board-wrap">
+        <canvas id="gameCanvas" width="300" height="600" aria-label="블록드랍 게임 보드"></canvas>
+        <div class="score-pop" id="scorePop" aria-live="polite"></div>
+        <div class="game-overlay" id="gameOverlay" hidden>
+          <strong id="overlayTitle">PAUSED</strong>
+          <p id="overlayText"></p>
+          <button type="button" id="overlayRestartButton" hidden>NEW GAME</button>
+        </div>
+      </div>
+
+      <aside class="side-panel">
+        <header class="game-header">
+          <div>
+            <p class="eyebrow">Enjoy GAME</p>
+            <h1>Block Drop</h1>
+          </div>
+          <span class="combo-badge" id="comboBadge">COMBO ×1</span>
+        </header>
+
+        <div class="info-row">
+          <div class="stats-grid">
+            <article class="stat-card stat-score">
+              <span>점수</span>
+              <strong id="score">0</strong>
+            </article>
+            <article class="stat-card">
+              <span>레벨</span>
+              <strong id="level">1</strong>
+            </article>
+            <article class="stat-card">
+              <span>제거한 줄</span>
+              <strong id="lines">0</strong>
+            </article>
+            <article class="stat-card">
+              <span>콤보</span>
+              <strong id="combo">×1</strong>
+            </article>
+          </div>
+
+          <section class="next-panel">
+            <h2>NEXT</h2>
+            <canvas id="nextCanvas" width="150" height="120" aria-label="다음 블록"></canvas>
+          </section>
+        </div>
+
+        <div class="button-row">
+          <button type="button" id="pauseButton">일시정지</button>
+          <button type="button" id="restartButton">새 게임</button>
+        </div>
+
+        <section class="controls">
+          <h2>조작법</h2>
+          <div class="control-grid">
+            <span><b>← →</b> 이동</span>
+            <span><b>↓</b> 내리기</span>
+            <span><b>↑ / X</b> 회전</span>
+            <span><b>Space</b> 즉시 낙하</span>
+            <span><b>P</b> 일시정지</span>
+          </div>
+        </section>
+
+        <section class="score-guide">
+          <h2>점수 배율</h2>
+          <p>1줄 ×1 · 2줄 ×1.5 · 3줄 ×2 · 4줄 ×4</p>
+          <p>연속 제거: ×1 → ×2 → ×3 → ×4</p>
+        </section>
+
+        <div class="mobile-controls" aria-label="모바일 조작 버튼">
+          <button type="button" data-action="left" aria-label="왼쪽 이동">←</button>
+          <button type="button" data-action="rotate" aria-label="오른쪽 회전">↻</button>
+          <button type="button" data-action="right" aria-label="오른쪽 이동">→</button>
+          <button type="button" data-action="down" aria-label="아래 이동">↓</button>
+          <button type="button" data-action="drop" aria-label="바로 내리기">DROP</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+  <script src="tt_game.js"></script>
+</body>
+</html>

@@ -331,3 +331,156 @@ const observer = new IntersectionObserver(
 revealTargets.forEach((el) => {
   observer.observe(el);
 });
+
+
+/* ==============================
+   Game Zone
+================================ */
+
+const gameLaunchButtons = document.querySelectorAll(
+  ".game-zone-play-button"
+);
+
+const gamePlayer = document.getElementById("game-player");
+const gameFrame = document.getElementById("game-frame");
+const gameFrameStage = document.getElementById("game-frame-stage");
+const gameFrameTitle = document.getElementById("game-frame-title");
+const gameCloseButton = document.getElementById("game-close-button");
+const gameFullscreenButton = document.getElementById(
+  "game-fullscreen-button"
+);
+
+let currentGameId = null;
+
+
+/* 음악이 꺼져 있을 때만 재생 */
+async function ensureGameZoneMusic() {
+  if (!audioPlayer) {
+    return;
+  }
+
+  if (audioPlayer.paused) {
+    await playMusic();
+  }
+}
+
+
+/* 게임 창 열기 */
+async function openGame(button) {
+  const gameId = button.dataset.gameId;
+  const gameTitle = button.dataset.gameTitle;
+  const gameSource = button.dataset.gameSrc;
+
+  const gameWidth = button.dataset.gameWidth || "100%";
+  const gameHeight = button.dataset.gameHeight || "650";
+
+  await ensureGameZoneMusic();
+
+  /* 버튼 선택 상태 */
+  gameLaunchButtons.forEach((item) => {
+    const isCurrent = item === button;
+
+    item.classList.toggle("is-active", isCurrent);
+    item.setAttribute("aria-expanded", String(isCurrent));
+  });
+
+  /* 게임 크기 설정 */
+  if (gameWidth.includes("%")) {
+    gameFrame.style.width = gameWidth;
+  } else {
+    gameFrame.style.width = `${gameWidth}px`;
+  }
+
+  gameFrame.style.height = `${gameHeight}px`;
+
+  /* 다른 게임을 선택했을 때만 iframe 주소 변경 */
+  if (currentGameId !== gameId) {
+    gameFrame.src = gameSource;
+    currentGameId = gameId;
+  }
+
+  gameFrame.title = gameTitle;
+  gameFrameTitle.textContent = `NOW PLAYING · ${gameTitle}`;
+
+  /* 닫혀 있었다면 열기 */
+  if (gamePlayer.hidden) {
+    gamePlayer.hidden = false;
+
+    gamePlayer.classList.remove("is-opening");
+
+    /* 애니메이션 재실행 */
+    void gamePlayer.offsetWidth;
+
+    gamePlayer.classList.add("is-opening");
+  }
+
+  /* 게임 창으로 부드럽게 이동 */
+  window.setTimeout(() => {
+    gamePlayer.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }, 100);
+}
+
+
+/* 게임 실행 버튼 */
+gameLaunchButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    openGame(button);
+  });
+});
+
+
+/* 게임 창 닫기 */
+function closeGamePlayer() {
+  if (!gamePlayer || !gameFrame) {
+    return;
+  }
+
+  gamePlayer.hidden = true;
+  gamePlayer.classList.remove("is-opening", "is-fullscreen");
+
+  gameFrame.src = "about:blank";
+
+  gameLaunchButtons.forEach((button) => {
+    button.classList.remove("is-active");
+    button.setAttribute("aria-expanded", "false");
+  });
+
+  currentGameId = null;
+}
+
+
+if (gameCloseButton) {
+  gameCloseButton.addEventListener("click", closeGamePlayer);
+}
+
+
+/* 전체 화면 형태로 확장 */
+if (gameFullscreenButton) {
+  gameFullscreenButton.addEventListener("click", () => {
+    const isFullscreen =
+      gamePlayer.classList.toggle("is-fullscreen");
+
+    gameFullscreenButton.textContent =
+      isFullscreen ? "RESTORE" : "FULL";
+
+    document.body.style.overflow =
+      isFullscreen ? "hidden" : "";
+  });
+}
+
+
+/* ESC 키로 전체 화면 해제 */
+window.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") {
+    return;
+  }
+
+  if (gamePlayer.classList.contains("is-fullscreen")) {
+    gamePlayer.classList.remove("is-fullscreen");
+    gameFullscreenButton.textContent = "FULL";
+    document.body.style.overflow = "";
+  }
+});
