@@ -1263,3 +1263,8 @@ svg {
     font-size: 24px;
   }
 }
+
+.game-zone-card:nth-child(3) .game-zone-icon{
+  font-size:32px;
+  background:#e6f8b5;
+}

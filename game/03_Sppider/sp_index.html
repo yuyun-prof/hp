@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#075b3c" />
+  <title>Sppider 97</title>
+  <link rel="stylesheet" href="sp_style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand">
+        <button id="menuBtn" class="icon-btn" aria-label="메뉴 열기">☰</button>
+        <div>
+          <h1>Sppider 97</h1>
+          <p id="modeLabel">쉬움 1 · 1무늬 · 104장</p>
+        </div>
+      </div>
+
+      <section class="score-panel" aria-label="게임 정보">
+        <div class="score-main">
+          <span>점수</span>
+          <strong id="score">0</strong>
+        </div>
+        <div><span>콤보</span><strong id="combo">×1</strong></div>
+        <div><span>이동</span><strong id="moves">0</strong></div>
+        <div><span>시간</span><strong id="timer">00:00</strong></div>
+      </section>
+
+      <div class="header-actions">
+        <button id="undoBtn" class="control-btn" title="뒤로가기 (Backspace)">↶ 되돌리기</button>
+        <button id="hintBtn" class="control-btn" title="힌트 (H)">💡 힌트</button>
+        <button id="newBtn" class="control-btn primary" title="새 게임 (N)">＋ 새 게임</button>
+      </div>
+    </header>
+
+    <main class="game-shell">
+      <section class="status-strip">
+        <div class="progress-wrap">
+          <div class="progress-text">
+            <span>완성 세트</span>
+            <b id="setProgress">0 / 8</b>
+          </div>
+          <div class="progress-track"><div id="progressBar"></div></div>
+        </div>
+        <div id="message" class="message">카드를 선택한 뒤 목적지를 클릭하세요.</div>
+        <button id="soundBtn" class="round-btn" aria-label="효과음 켜기/끄기">🔊</button>
+      </section>
+
+      <section id="tableau" class="tableau" aria-label="스빠이더 97 카드 보드"></section>
+
+      <section class="bottom-area">
+        <div class="foundation-area">
+          <span class="area-label">완성</span>
+          <div id="foundations" class="foundations"></div>
+        </div>
+        <div class="stock-area">
+          <div class="stock-info">
+            <b id="stockRounds">5회 남음</b>
+            <span>모든 열에 한 장씩 배분</span>
+          </div>
+          <button id="stockPile" class="stock-pile" aria-label="새 카드 배분">
+            <span class="card-back"></span>
+            <span class="deal-label">배분</span>
+          </button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <aside id="sideMenu" class="side-menu" aria-hidden="true">
+    <div class="side-head">
+      <h2>게임 메뉴</h2>
+      <button id="closeMenuBtn" class="icon-btn">✕</button>
+    </div>
+    <button id="menuNewGame">새 게임</button>
+    <button id="menuDifficulty">난이도 선택</button>
+    <button id="menuUndo">되돌리기</button>
+    <button id="menuHint">힌트 보기</button>
+    <button id="menuRules">게임 방법</button>
+    <div class="shortcut-box">
+      <b>키보드</b>
+      <span>← → 열 이동</span>
+      <span>↑ ↓ 카드 이동</span>
+      <span>Space 집기/놓기</span>
+      <span>Backspace 되돌리기</span>
+      <span>H 힌트 · D 배분 · N 새 게임</span>
+    </div>
+  </aside>
+  <div id="menuShade" class="shade hidden"></div>
+
+  <div id="difficultyModal" class="modal open" role="dialog" aria-modal="true">
+    <div class="modal-card difficulty-card">
+      <div class="modal-title">
+        <div>
+          <p class="eyebrow">9개의 도전</p>
+          <h2>난이도를 선택하세요</h2>
+        </div>
+        <button id="closeDifficulty" class="icon-btn hidden">✕</button>
+      </div>
+      <div class="quick-guide">
+        <div class="guide-item"><span class="guide-icon">🖱️</span><div><b>마우스 조작</b><small>클릭으로 선택 · 드래그로 이동 · 더블클릭으로 자동 이동</small></div></div>
+        <div class="guide-item"><span class="guide-icon">⌨️</span><div><b>키보드 조작</b><small>방향키 이동 · Space 집기/놓기 · Backspace 되돌리기</small></div></div>
+        <div class="guide-item"><span class="guide-icon">🎯</span><div><b>게임 목표</b><small>같은 무늬로 K부터 A까지 완성해 모든 카드를 제거하세요.</small></div></div>
+        <div class="guide-item"><span class="guide-icon">✨</span><div><b>자동 도움</b><small>10초 동안 움직임이 없으면 가능한 카드가 금색으로 빛납니다.</small></div></div>
+      </div>
+      <div class="difficulty-grid">
+        <section class="difficulty-group easy">
+          <h3>쉬움 <small>1무늬</small></h3>
+          <p>모든 카드가 같은 무늬입니다.</p>
+          <div class="level-buttons">
+            <button data-suits="1" data-level="1"><b>1</b><span>104장</span></button>
+            <button data-suits="1" data-level="2"><b>2</b><span>156장</span></button>
+            <button data-suits="1" data-level="3"><b>3</b><span>208장</span></button>
+          </div>
+        </section>
+        <section class="difficulty-group medium">
+          <h3>중간 <small>2무늬</small></h3>
+          <p>빨강·검정 두 무늬를 사용합니다.</p>
+          <div class="level-buttons">
+            <button data-suits="2" data-level="1"><b>1</b><span>104장</span></button>
+            <button data-suits="2" data-level="2"><b>2</b><span>156장</span></button>
+            <button data-suits="2" data-level="3"><b>3</b><span>208장</span></button>
+          </div>
+        </section>
+        <section class="difficulty-group hard">
+          <h3>어려움 <small>4무늬</small></h3>
+          <p>네 가지 무늬를 모두 사용합니다.</p>
+          <div class="level-buttons">
+            <button data-suits="4" data-level="1"><b>1</b><span>104장</span></button>
+            <button data-suits="4" data-level="2"><b>2</b><span>156장</span></button>
+            <button data-suits="4" data-level="3"><b>3</b><span>208장</span></button>
+          </div>
+        </section>
+      </div>
+      <div class="best-line" id="bestLine">최고 기록이 아직 없습니다.</div>
+    </div>
+  </div>
+
+  <div id="rulesModal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-card rules-card">
+      <div class="modal-title">
+        <h2>게임 방법</h2>
+        <button class="icon-btn close-rules">✕</button>
+      </div>
+      <ol>
+        <li>카드는 숫자가 1씩 작아지도록 쌓습니다. 무늬가 달라도 놓을 수 있습니다.</li>
+        <li>여러 장을 한 번에 옮기려면 선택한 묶음이 같은 무늬의 내림차순이어야 합니다.</li>
+        <li>같은 무늬로 K부터 A까지 완성하면 자동으로 제거됩니다.</li>
+        <li>빈 열에는 어떤 카드나 올바른 묶음도 놓을 수 있습니다.</li>
+        <li>새 카드를 배분할 때는 빈 열이 없어야 합니다.</li>
+      </ol>
+      <p class="tip">연속으로 좋은 이동을 하면 콤보 배수가 지수적으로 증가합니다.</p>
+      <button class="primary large close-rules">확인</button>
+    </div>
+  </div>
+
+  <div id="confirmModal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-card small-card">
+      <h2>새 게임을 시작할까요?</h2>
+      <p>현재 진행 내용은 사라집니다.</p>
+      <div class="modal-actions">
+        <button id="cancelNew">취소</button>
+        <button id="confirmNew" class="primary">새 게임</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="winModal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-card win-card">
+      <div class="trophy">🏆</div>
+      <p class="eyebrow">GAME CLEAR</p>
+      <h2>대단합니다!</h2>
+      <div class="final-score">
+        <span>최종 점수</span>
+        <strong id="finalScore">0</strong>
+      </div>
+      <div class="result-grid">
+        <div><span>시간</span><b id="finalTime">00:00</b></div>
+        <div><span>이동</span><b id="finalMoves">0</b></div>
+        <div><span>최대 콤보</span><b id="finalCombo">×1</b></div>
+      </div>
+      <div id="recordBadge" class="record-badge hidden">NEW BEST!</div>
+      <div class="modal-actions">
+        <button id="changeMode">난이도 선택</button>
+        <button id="playAgain" class="primary">다시 하기</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="comboBurst" class="combo-burst"></div>
+  <script src="sp_game.js"></script>
+</body>
+</html>

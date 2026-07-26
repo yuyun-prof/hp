@@ -419,6 +419,7 @@ async function openGame(button) {
     gamePlayer.scrollIntoView({
       behavior: "smooth",
       block: "start"
+      
     });
   }, 100);
 }
