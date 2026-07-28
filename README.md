@@ -17,11 +17,24 @@ Our research combines artificial intelligence, signal processing, multimodal sen
 # Research Framework
 
 ```
-                         AI for Intelligent Sensing
-                                   │
-        ┌──────────────────────────┼──────────────────────────┐
-        │                          │                          │
-   Application Areas          Core Technologies         Intelligent AI
+                                     AI for Intelligent Sensing
+                                                   │
+        ┌────────────────┬────────────────┬────────────────┬────────────────┬────────────────┐
+        │                │                │                │                │                │
+     Human           Spatial       Environmental      Sensor Signal     Multimodal      Efficient &
+  Intelligence     Intelligence     Intelligence       Processing        Sensor AI      Reliable AI
+
+
+AI & Intelligent Sensing Laboratory
+│
+└── AI for Intelligent Sensing
+    ├── Human Intelligence
+    ├── Spatial Intelligence
+    ├── Environmental Intelligence
+    ├── Sensor Signal Processing
+    ├── Multimodal Sensor AI
+    └── Efficient & Reliable AI
+
 ```
 
 ---
