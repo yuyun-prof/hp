@@ -333,6 +333,23 @@ revealTargets.forEach((el) => {
 });
 
 
+// 02 research
+const researchTopics = document.querySelectorAll(".research-topic");
+
+researchTopics.forEach((topic) => {
+  topic.addEventListener("toggle", () => {
+    if (!topic.open) return;
+
+    researchTopics.forEach((otherTopic) => {
+      if (otherTopic !== topic) {
+        otherTopic.open = false;
+      }
+    });
+  });
+});
+
+
+
 /* ==============================
    Game Zone
 ================================ */
