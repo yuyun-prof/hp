@@ -348,6 +348,17 @@ researchTopics.forEach((topic) => {
   });
 });
 
+document.querySelectorAll(".research-topic").forEach((item) => {
+  const toggle = item.querySelector(".research-toggle");
+
+  function updateText() {
+      toggle.textContent = item.open ? "Close" : "more..";
+  }
+
+  updateText();                 // 초기 상태
+  item.addEventListener("toggle", updateText);
+});
+
 
 
 /* ==============================

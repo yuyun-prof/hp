@@ -567,14 +567,14 @@ h2 {
   color: var(--navy);
   background: var(--lime);
 
-  font-size: 25px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 1000;
 
   transition: transform 0.25s ease;
 }
 
 .research-topic[open] .research-toggle {
-  transform: rotate(45deg);
+  transform: rotate(405deg);
 }
 
 
@@ -870,7 +870,7 @@ h2 {
     width: 32px;
     height: 32px;
 
-    font-size: 20px;
+    font-size: 10px;
   }
 
   .research-detail {
